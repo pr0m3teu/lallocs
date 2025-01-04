@@ -8,8 +8,8 @@
 typedef struct Node Node;
 
 struct Node {
-    Node* left;
-    Node* right;
+    Node* prev;
+    Node* next;
     void* ptr;
 };
 
@@ -44,8 +44,8 @@ void* lmalloc(List* ptrs, uint64_t size)
         ptrs->start = malloc(sizeof(Node));
         check_ptr(ptrs->start);
 
-        ptrs->start->right = NULL;
-        ptrs->start->left = NULL;
+        ptrs->start->next = NULL;
+        ptrs->start->prev = NULL;
 
         void* ptr = malloc(size);
         check_ptr(ptr);
@@ -58,19 +58,21 @@ void* lmalloc(List* ptrs, uint64_t size)
     check_ptr(ptr);
     Node* p = ptrs->start;
 
-    while(p->right != NULL)
+    while(p->next != NULL)
     {
-        p = p->right;
+        p = p->next;
     }
-    p->right = malloc(sizeof(Node));
+    p->next = malloc(sizeof(Node));
     check_ptr(ptr);
 
-    p->right->left = p;
-    p->right->right = NULL;
-    p->right->ptr = ptr;
+    p->next->prev = p;
+    p->next->next= NULL;
+    p->next->ptr = ptr;
 
     return ptr;
 }
+
+
 
 #endif // LALLOCS_IMPLEMENTATION
 #endif // LALLOCS_H_

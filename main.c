@@ -12,7 +12,7 @@ int main(void)
     printf("%s\n", str);
     
     printf("ptrs->start: %p\n", ptrs.start);
-    printf("ptrs->start->right: %p\n", ptrs.start->right);
+    printf("ptrs->start->next: %p\n", ptrs.start->next);
     printf("ptrs->start->ptr: %p\n", ptrs.start->ptr);
     printf("str: %p\n", str);
 
