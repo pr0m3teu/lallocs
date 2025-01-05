@@ -15,11 +15,13 @@ struct Node {
 
 typedef struct {
     Node* start;
-    size_t size;
+    uint64_t size;
 } List;
 
 void* lmalloc(List* ptrs, uint64_t size);
 void lfree(List* ptrs, void* ptr);
+void lfree_all(List* ptrs);
+
 int check_list(List ptrs);
 
 #ifdef LALLOCS_IMPLEMENTATION
@@ -79,7 +81,6 @@ void* lmalloc(List* ptrs, uint64_t size)
 void lfree(List* ptrs, void* ptr)
 {
     Node* p = ptrs->start;
-    ptrs->size--;
     if(p->ptr == ptr)
     {
         free(p->ptr);
@@ -90,6 +91,8 @@ void lfree(List* ptrs, void* ptr)
         ptrs->start->ptr = NULL;
         free(ptrs->start);
         ptrs->start = p;
+
+        ptrs->size--;
         return;
     }
 
@@ -103,13 +106,26 @@ void lfree(List* ptrs, void* ptr)
 
             free(p->ptr);
             p->ptr = NULL;
+
             p->prev = NULL;
             p->next = NULL;
             free(p);
+            p = NULL;
+
+            ptrs->size--;
+            return;
         }
         p = p_next;
     }
         
+}
+
+void lfree_all(List* ptrs)
+{
+    while(ptrs->start != NULL)
+    {
+        lfree(ptrs, ptrs->start->ptr);
+    }
 }
 
 int check_list(List ptrs)
