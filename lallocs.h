@@ -19,6 +19,7 @@ typedef struct {
 } List;
 
 void* lmalloc(List* ptrs, uint64_t size);
+void* lrealloc(List* ptrs, void* ptr, uint64_t size);
 void lfree(List* ptrs, void* ptr);
 void lfree_all(List* ptrs);
 
@@ -76,6 +77,21 @@ void* lmalloc(List* ptrs, uint64_t size)
     p->next->ptr = ptr;
 
     return ptr;
+}
+
+void* lrealloc(List* ptrs, void* ptr, uint64_t size)
+{
+    Node* p = ptrs->start;
+    while(p != NULL)
+    {
+        if (p->ptr == ptr)
+        {
+            p->ptr = realloc(ptr, size);
+            return p->ptr;
+        }
+        p = p->next;
+    }
+    return NULL;
 }
 
 void lfree(List* ptrs, void* ptr)
