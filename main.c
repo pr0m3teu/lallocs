@@ -6,16 +6,18 @@
 
 int main(void)
 {
-    List ptrs = {0};
-    char* str = lmalloc(&ptrs, sizeof(char) * 13);
-    char* name = lmalloc(&ptrs, sizeof(char) * 10);
+    const List ptrs = {0};
+    const char* str = lmalloc(&ptrs, sizeof(char) * 13);
+    const char* name = lmalloc(&ptrs, sizeof(char) * 10);
 
     strncpy(name, "Andrei\n", 10);
     strncpy(str, "Hello ", 13);
 
-    for (size_t i = 0; i < 20; i++)
+    for (size_t i = 0; i < 100000; i++)
     {
-        lmalloc(&ptrs, 20);
+        const char* loop_message = lmalloc(&ptrs, 200);
+        strncpy(loop_message, "HEEEEELLLLLOOO WOOOOORLD!!!\n", 200);
+        printf("%s", loop_message);
     }
     
     printf("ptrs.size: %lu\n", ptrs.size);

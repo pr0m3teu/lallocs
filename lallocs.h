@@ -62,20 +62,26 @@ void* lmalloc(List* ptrs, uint64_t size)
 
     void* ptr = malloc(size);
     check_ptr(ptr);
-    Node* p = ptrs->start;
 
-    while(p->next != NULL)
-    {
-        p = p->next;
-    }
-    p->next = malloc(sizeof(Node));
-    check_ptr(p->next);
+//    Node* p = ptrs->start;
 
+//    while(p->next != NULL)
+//    {
+//        p = p->next;
+//    }
+//    p->next = malloc(sizeof(Node));
+    Node *p = malloc(sizeof(Node));
+    check_ptr(p);
+    
+    p->next = ptrs->start;
+    p->prev = NULL;
+    p->ptr = ptr;
+    ptrs->start = p;
     ptrs->size++;
-    p->next->prev = p;
-    p->next->next= NULL;
-    p->next->ptr = ptr;
 
+   // p->next->prev = p;
+   // p->next->next= NULL;
+   // p->next->ptr = ptr;
     return ptr;
 }
 
